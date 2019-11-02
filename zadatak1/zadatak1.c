@@ -21,48 +21,17 @@ int main ()
 
 	while(1)
 	{
-
 		citanje_tastera(&tval4);
 
 		citanje_prekidaca(&sval1, &sval2, &sval3, &sval4);
 
 		suma_prekidaca = sval4 + 2*sval3 + 4*sval2;
 
-		/*if(sval1)
-		{
-			if(tval4 && dozvola)
-			{
-				dozvola = 0;
-
-				if(sabiranje)
-					sabiranje = 0;
-				else
-					sabiranje = 1;
-			}
-			if(!tval4)
-				dozvola = 1;
-
-			if(sabiranje)
-			{
-				led += suma_prekidaca;
-				if(led > 15)
-					led = 15;
-			}
-			else
-			{
-				led -= suma_prekidaca;
-				if(led < 0)
-					led = 0;
-			}
-
-		}*/
-
 		odluci_koje_ces_paliti(&tval4, &sval1, &suma_prekidaca, &led);
 
 		upali_diode(&led);
 
 		usleep(20*100000);
-
 	}
 }
 
