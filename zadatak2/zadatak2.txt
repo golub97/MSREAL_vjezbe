@@ -1,0 +1,13 @@
+GRUPA 2 ( PETAK 16:15 F317) 
+
+Napraviti aplikaciju pisanu u C programskom jeziku koja komunicira sa LED, tasterima i prekidacima.
+Cetiri LED diode (D3-D0) reprezentiraju 4-bitnu vrednost u opsegu 0-15.
+Tri prekidaca (SW2-SW0) reprezentiraju 3-bitnu vrednost u opsegu 0-7.
+Cetvrti prekidac (SW3) bira operaciju koja se izvrsava:
+	0- sabiranje
+	1- oduzimanje
+Pritiskom na taster BTN0 se vrednost na prekidacima sabira/oduzima sa vrednoscu na diodama, te se vrednost na diodama azurira (LED = LED + prekidaci). 
+Prekoracenje opsega se ne sme dogoditi, tj diode imaju maksimalnu vrednost b1111 = 15 i minimalnu  b0000 = 0. 
+Potrebno je izvrsiti softversko diferenciranje kako bi jedan pritisak tastera izvrsio operaciju sabiranja/oduzimanja tacno jedan put. 
+Aplikaciju predati sa jednostavnim Makefile-om koji kompajlira C aplikaciju u objektni fajl, a zatim i u izvrsni. 
+Makefile mora imati laznu destinaciju clean koja brise generisane fajlove.
