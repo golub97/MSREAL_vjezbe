@@ -1,0 +1,15 @@
+GRUPA IP1-prij ( SREDA 15:45 F317) 
+
+Napraviti aplikaciju pisanu u C programskom jeziku koja komunicira sa LED, tasterima i prekidacima. 
+Aplikacija treba da izvrsi impulsno sirinsku modulaciju, pri cemu se pomocu tastera i prekidaca moze kontrolisati jacina osvetljenja.
+Postoji 11 nivoa osvetljenja: 0%, 10%, 20% ... 90%, 100%. 
+Pomocu prekidaca SW0 i SW1 se bira korak sa kojim se mjenja nivo osvetljenja:
+SW0 = 0 i SW1 = 0 -> 0%
+SW0 = 0 i SW1 = 1 -> 10%
+SW0 = 1 i SW1 = 0 -> 20%
+SW0 = 1 i SW1 = 1 -> 30%
+Pritiskom na taster BTN0 se nivo osvetljenja povecava za vrednost odredjenu prekidacima,
+dok se pritiskom na BTN1 nivo osvetljenja smanjuje.
+Potrebno je izvrsiti softversko diferenciranje kako bi jedan pritisak tastera povecao/smanjio nivo za tacno jedan korak. 
+Aplikaciju predati sa jednostavnim Makefile-om koji kompajlira C aplikaciju u objektni fajl, a zatim i u izvrsni. 
+Makefile mora imati laznu destinaciju clean koja brise generisane fajlove.
