@@ -7,10 +7,11 @@ void citanje_prekidaca(char *, char *, char *, char *);
 void odluci_koje_ces_paliti(const char *, const char *, const int *, int *);
 void upali_diode(const int *);
 
+#define delay 50000
 int main ()
 {
 	//za tastere
-	char tval4;
+	char sabiranje = 1;
 
 	//prekidaci
 	char sval1, sval2, sval3, sval4;
@@ -21,50 +22,68 @@ int main ()
 
 	while(1)
 	{
-		citanje_tastera(&tval4);
+		upali_diode(&led);
+
+		citanje_tastera(&sabiranje);
 
 		citanje_prekidaca(&sval1, &sval2, &sval3, &sval4);
 
 		suma_prekidaca = sval4 + 2*sval3 + 4*sval2;
 
-		odluci_koje_ces_paliti(&tval4, &sval1, &suma_prekidaca, &led);
-
-		upali_diode(&led);
-
-		usleep(20*100000);
+		odluci_koje_ces_paliti(&sabiranje, &sval1, &suma_prekidaca, &led);
 	}
 }
 
-void citanje_tastera(char *tval4)
+void citanje_tastera(char *sabiranje)
 {
 		//tasteri
 		static FILE *fp1;
 		static char *str1;
-		static char tval1, tval2, tval3;
+		static char tval1, tval2, tval3, tval4;
 		static size_t num_of_bytes1 = 6;
+		static dozvola = 1;
+		unsigned int brojac = 0;
 
-		//Citanje vrednosti tastera
-		fp1 = fopen ("/dev/button", "r");
-		if(fp1 == NULL)
+		while(brojac != 2000000)
 		{
-			puts("Problem pri otvaranju /dev/button");
-			exit(-1);
+			//Citanje vrednosti tastera
+			fp1 = fopen ("/dev/button", "r");
+			if(fp1 == NULL)
+			{
+				puts("Problem pri otvaranju /dev/button");
+				exit(-1);
+			}
+
+			str1 = (char *)malloc(num_of_bytes1 + 1);
+			getline(&str1, &num_of_bytes1, fp1);
+
+			if(fclose(fp1))
+			{
+				puts("Problem pri zatvaranju /dev/button");
+				exit(-1);
+			}
+
+			//tval1 = str1[2] - 48;
+			//tval2 = str1[3] - 48;
+			//tval3 = str1[4] - 48;
+			tval4 = str1[5] - 48;
+			free(str1);
+
+			if(tval4 && dozvola)
+			{
+				dozvola = 0;
+
+				if(*sabiranje)
+					*sabiranje = 0;
+				else
+					*sabiranje = 1;
+			}
+			if(!(tval4))
+				dozvola = 1;
+
+			brojac += delay;
+			usleep(delay);
 		}
-
-		str1 = (char *)malloc(num_of_bytes1 + 1);
-		getline(&str1, &num_of_bytes1, fp1);
-
-		if(fclose(fp1))
-		{
-			puts("Problem pri zatvaranju /dev/button");
-			exit(-1);
-		}
-
-		//tval1 = str1[2] - 48;
-		//tval2 = str1[3] - 48;
-		//tval3 = str1[4] - 48;
-		*tval4 = str1[5] - 48;
-		free(str1);
 }
 void citanje_prekidaca(char *sval1, char *sval2, char *sval3, char *sval4)
 {
@@ -99,26 +118,11 @@ void citanje_prekidaca(char *sval1, char *sval2, char *sval3, char *sval4)
 		*sval4 = str2[5] - 48;
 		free(str2);
 }
-void odluci_koje_ces_paliti(const char *tval4,const char *sval1, const int *suma_prekidaca, int *led)
+void odluci_koje_ces_paliti(const char *sabiranje,const char *sval1, const int *suma_prekidaca, int *led)
 {
-		static char dozvola = 1;
-		static char sabiranje = 1;
-
 		if(*sval1)
 		{
-			if(*tval4 && dozvola)
-			{
-				dozvola = 0;
-
-				if(sabiranje)
-					sabiranje = 0;
-				else
-					sabiranje = 1;
-			}
-			if(!(*tval4))
-				dozvola = 1;
-
-			if(sabiranje)
+			if(*sabiranje)
 			{
 				*led += *suma_prekidaca;
 				if(*led > 15)
