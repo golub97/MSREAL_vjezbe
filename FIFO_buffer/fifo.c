@@ -79,9 +79,18 @@ ssize_t fifo_read(struct file *pfile, char __user *buffer, size_t length, loff_t
 		}
 		else
 		{
-			len = scnprintf(buff, BUFF_SIZE, "%d ", fifo[rep]);
-			ret = copy_to_user(buffer, buff, len);
-			printk(KERN_INFO "Uspjesno procitan broj: %d", fifo[rep]);
+			if(hex_or_dec == 10)
+			{
+				len = scnprintf(buff, BUFF_SIZE, "%d ", fifo[rep]);
+				ret = copy_to_user(buffer, buff, len);
+				printk(KERN_INFO "Uspjesno procitan broj: %d", fifo[rep]);
+			}
+			else
+			{
+				len = scnprintf(buff, BUFF_SIZE, "%d ", fifo[rep]);
+				ret = copy_to_user(buffer, buff, len);
+				printk(KERN_INFO "Uspjesno procitan broj %x", fifo[rep]);
+			}
 			rep = (rep + 1) % BUFF_SIZE;
 			--broj_clanova;
 
