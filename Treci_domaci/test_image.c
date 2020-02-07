@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fcntl.h>
+#include <time.h>
+#include <unistd.h>
 
 void crno(void);
 void kadar(void);
@@ -17,41 +19,40 @@ void kvadrat(int);
 
 int main(void)
 {
-	int x,y;
+	int i, j;
 	FILE* fp;
+	srand(time(NULL));
 
 	crno();
-
 	//kadar();
 
-	for(x = 1; x < 6; x+=3)
-		krug(59 + x*88);
-	for(x = 2; x < 6; x+=3)
-		trougao(59 + x*88);
-	for(x = 0; x < 6; x+=3)
-		iks(59 + x*88);
-
-
-	/*for(y=0; y<480; y++)
+	for(i = 0; i < 6; ++i)
 	{
-		for(x=0; x<640; x++)
+		j = rand() % 4;
+
+		printf("%d\n", j);
+
+		switch(j)
 		{
-			fp = fopen("/dev/vga_dma", "w");
-			if(fp == NULL)
-			{
-				printf("Cannot open /dev/vga for write\n");
-				return -1;
-			}
-			//fprintf(fp,"%d,%d,%#04x\n",x,y,image[y*640+x]);
-			fprintf(fp,"%d,%d,%#04x\n",x,y,0x0000);
-			fclose(fp);
-			if(fp == NULL)
-			{
-				printf("Cannot close /dev/vga\n");
-				return -1;
-			}
+			case(0):
+				krug(59 + i*88);
+				break;
+			case(1):
+				trougao(59 + i*88);
+				break;
+			case(2):
+				iks(59 + i*88);
+				break;
+			case(3):
+				kvadrat(59 + i*88);
+				break;
+			default:
+				break;
 		}
-	}*/
+	}
+
+	/*for(x = 1; x < 6; x+=3)
+		krug(59 + x*88);*/
 	return 0;
 }
 
@@ -176,4 +177,25 @@ void iks(int xx)
 		fprintf(nesto,"%d,%d,%#04x\n", x, y++, 0x4400);
 		fclose(nesto);
 	}
+}
+void kvadrat(int xx)
+{
+	int x, i, y = 119;
+	FILE *nesto;
+
+	for(i = 0; i < 2; ++i)
+		for(x = xx; x <= (xx+80); ++x)
+		{
+			nesto = fopen("/dev/vga_dma", "w");
+			fprintf(nesto,"%d,%d,%#04x\n", x, y+i*80, 0x4400);
+			fclose(nesto);
+		}
+
+	for(i = 0; i < 2; ++i)
+		for(x = y; x <= (y + 80); ++x)
+		{
+			nesto = fopen("/dev/vga_dma", "w");
+			fprintf(nesto,"%d,%d,%#04x\n", xx + 80*i, x, 0x4400);
+			fclose(nesto);
+		}
 }
