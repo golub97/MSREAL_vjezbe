@@ -5,116 +5,124 @@
 #include <fcntl.h>
 #include <time.h>
 #include <unistd.h>
+#define crtanje(i) 59+i*88
+#define CRVENA 0xF000
+#define ZELENA 0x0F00
 
-int citanje_tastera(char *, char *, char *, char *);
+void kombinacija(int *);
 
 int main(void)
 {
-	/*int i, j;
-	FILE* fp;
+	FILE *fp;
 	srand(time(NULL));
+	char *str;
+	char tval1, tval2, tval3, tval4;
+	int dozvola1 = 1, dozvola2 = 1, dozvola3 = 1, dozvola4 = 1;
+	int i = 0;
+	size_t num_of_bytes = 6;
+	int niz[6];
 
-	crno();
+	crno(1);
 	//kadar();
+	kombinacija(niz);
+	sleep(2);
+	crno(2);
+
+	while(i != 6)
+	{
+		//citanje vrijednosti tastera
+		fp = fopen("/dev/button", "r");
+		if(fp == NULL)
+		{
+			printf("Problem pri otvaranju /dev/button\n");
+			return -1;
+		}
+
+		str = (char *)malloc(num_of_bytes+1);
+		getline(&str, &num_of_bytes, fp);
+
+		if(fclose(fp))
+		{
+			printf("problem pri zatvaranju /dev/button");
+			return -1;
+		}
+
+		tval1 = str[2] - 48;
+		tval2 = str[3] - 48;
+		tval3 = str[4] - 48;
+		tval4 = str[5] - 48;
+
+		free(str);
+
+		if(tval1 && dozvola1)
+		{
+			dozvola1 = 0;
+			printf("%d\t", 1);
+			printf("%d\n", niz[i]);
+			krug(crtanje(i), (niz[i] == 1) ? ZELENA : CRVENA);
+			i++;
+		}
+		if(!tval1)
+			dozvola1 = 1;
+		if(tval2 && dozvola2)
+		{
+			dozvola2 = 0;
+			printf("%d\t", 2);
+			printf("%d\n", niz[i]);
+			trougao(crtanje(i), (niz[i] == 2) ? ZELENA : CRVENA);
+			++i;
+		}
+		if(!tval2)
+			dozvola2 = 1;
+		if(tval3 && dozvola3)
+		{
+			dozvola3 = 0;
+			printf("%d\t", 3);
+			printf("%d\n", niz[i]);
+			iks(crtanje(i), (niz[i] == 3) ? ZELENA : CRVENA);
+			++i;
+		}
+		if(!tval3)
+			dozvola3 = 1;
+		if(tval4 && dozvola4)
+		{
+			dozvola4 = 0;
+			printf("%d\t", 4);
+			printf("%d\n", niz[i]);
+			kvadrat(crtanje(i), (niz[i] == 4) ? ZELENA : CRVENA);
+			++i;
+		}
+		if(!tval4)
+			dozvola4 = 1;
+		usleep(50000);
+	}
+	return 0;
+}
+void kombinacija(int *niz)
+{
+	int i, j;
 
 	for(i = 0; i < 6; ++i)
 	{
-		j = rand() % 4;
-
-		printf("%d\n", j);
+		j = (rand() % 4) + 1;
+		niz[i] = j;
 
 		switch(j)
 		{
-			case(0):
-				krug(59 + i*88);
-				break;
 			case(1):
-				trougao(59 + i*88);
+				krug(crtanje(i), 0xFFFF);
 				break;
 			case(2):
-				iks(59 + i*88);
+				trougao(crtanje(i), 0xFFFF);
 				break;
 			case(3):
-				kvadrat(59 + i*88);
+				iks(crtanje(i), 0xFFFF);
+				break;
+			case(4):
+				kvadrat(crtanje(i), 0xFFFF);
 				break;
 			default:
 				break;
 		}
 	}
-
-	/*for(x = 1; x < 6; x+=3)
-		krug(59 + x*88);*/
-	char tval[4];
-	int dozvola[4] = {1, 1, 1, 1};
-	int i = 0;
-	while(i != 6)
-	{
-		citanje_tastera(tval, tval+1, tval+2, tval+3);
-		if(tval[0] && dozvola[0])
-		{
-			dozvola[0] = 0;
-			printf("%d\n", 1);
-			++i;
-		}
-		if(!tval[0])
-			dozvola[0] = 1;
-		if(tval[1] && dozvola[1])
-		{
-			dozvola[1] = 0;
-			printf("%d\n", 2);
-			++i;
-		}
-		if(!tval[1])
-			dozvola[1] = 1;
-		if(tval[2] && dozvola[2])
-		{
-			dozvola[2] = 0;
-			printf("%d\n", 3);
-			++i;
-		}
-		if(!tval[2])
-			dozvola[2] = 1;
-		if(tval[3] && dozvola[3])
-		{
-			dozvola[3] = 0;
-			printf("%d\n", 4);
-			++i;
-		}
-		if(!tval[3])
-			dozvola[3] = 1;
-
-	}
-	return 0;
-}
-
-int citanje_tastera(char *tval1, char *tval2, char *tval3, char *tval4)
-{
-	FILE *fp;
-	char *str;
-	size_t num_of_bytes = 6;
-	int temp = 0;
-	do
-	{
-		//Citanje vrednosti tastera
-		fp = fopen("/dev/button", "r");
-		if(fp==NULL)
-		{
-			puts("Problem pri otvaranju /dev/button");
-			return -1;
-		}
-		str = (char *)malloc(num_of_bytes+1);
-		getline(&str, &num_of_bytes, fp);
-		if(fclose(fp))
-		{
-			puts("Problem pri zatvaranju /dev/button");
-			return -1;
-		}
-		*tval1 = str[2] - 48;
-		*tval2 = str[3] - 48;
-		*tval3 = str[4] - 48;
-		*tval4 = str[5] - 48;
-		free(str);
-		//printf("Vrednosti tastera: %d %d %d %d\n", tval1, tval2, tval3, tval4);
-		usleep(10000);
-	}while(!(*tval1 || *tval2 || *tval3 || *tval4));
 }

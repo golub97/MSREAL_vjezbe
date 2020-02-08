@@ -1,11 +1,11 @@
 #include "figure.h"
 
-void crno(void)
+void crno(int z)
 {
     FILE *nesto;
 	int x, y;
 
-	for(y = 0; y < 480; ++y)
+	for(y = 0; y < (480/z); ++y)
 		for(x = 0; x < 640; ++x)
 		{
 			nesto = fopen("/dev/vga_dma", "w");
@@ -49,7 +49,7 @@ void kadar(void)
 
 }
 
-void krug(int xx)
+void krug(int xx, int boja)
 {
 	int cx = xx + 40, cy = 119 + 40, x, y;
 	float q;
@@ -62,23 +62,23 @@ void krug(int xx)
 			if((39.6 < q) && (q < 40.4))
 			{
 				nesto = fopen("/dev/vga_dma", "w");
-				fprintf(nesto,"%d,%d,%#04x\n", x, y, 0x0400);
+				fprintf(nesto,"%d,%d,%#04x\n", x, y, boja);
 				fclose(nesto);
 			}
 		}
 }
-void trougao(int xx)
+void trougao(int xx, int boja)
 {
 	int sredina = xx + 40, x, y = 119;
 	FILE *nesto;
 	for(x = sredina; xx < x; --x)
 	{
 		nesto = fopen("/dev/vga_dma", "w"); //lijeva kateta
-		fprintf(nesto,"%d,%d,%#04x\n", x, y++, 0x0400);
+		fprintf(nesto,"%d,%d,%#04x\n", x, y++, boja);
 		fclose(nesto);
 
 		nesto = fopen("/dev/vga_dma", "w");
-		fprintf(nesto,"%d,%d,%#04x\n", x, y++, 0x0400);
+		fprintf(nesto,"%d,%d,%#04x\n", x, y++, boja);
 		fclose(nesto);
 	}
 
@@ -87,23 +87,23 @@ void trougao(int xx)
 	for(x = sredina; x < (sredina + 40); ++x) //desna kateta
 	{
 			nesto = fopen("/dev/vga_dma", "w");
-			fprintf(nesto,"%d,%d,%#04x\n", x, y++, 0x0400);
+			fprintf(nesto,"%d,%d,%#04x\n", x, y++, boja);
 			fclose(nesto);
 
 			nesto = fopen("/dev/vga_dma", "w");
-			fprintf(nesto,"%d,%d,%#04x\n", x, y++, 0x0400);
+			fprintf(nesto,"%d,%d,%#04x\n", x, y++, boja);
 			fclose(nesto);
 	}
 
 	for(x = xx; x <= (xx+80); ++x)
 	{
 		nesto = fopen("/dev/vga_dma", "w");
-		fprintf(nesto,"%d,%d,%#04x\n", x, 199, 0x0400);
+		fprintf(nesto,"%d,%d,%#04x\n", x, 199, boja);
 		fclose(nesto);
 	}
 
 }
-void iks(int xx)
+void iks(int xx, int boja)
 {
 	int x, y = 119;
 	FILE *nesto;
@@ -111,18 +111,18 @@ void iks(int xx)
 	for(x = xx; x <= (xx+80); ++x)
 	{
 		nesto = fopen("/dev/vga_dma", "w");
-		fprintf(nesto,"%d,%d,%#04x\n", x, y++, 0x4400);
+		fprintf(nesto,"%d,%d,%#04x\n", x, y++, boja);
 		fclose(nesto);
 	}
 	y = 119;
 	for(x = xx+80; x >= xx; --x)
 	{
 		nesto = fopen("/dev/vga_dma", "w");
-		fprintf(nesto,"%d,%d,%#04x\n", x, y++, 0x4400);
+		fprintf(nesto,"%d,%d,%#04x\n", x, y++, boja);
 		fclose(nesto);
 	}
 }
-void kvadrat(int xx)
+void kvadrat(int xx, int boja)
 {
 	int x, i, y = 119;
 	FILE *nesto;
@@ -131,7 +131,7 @@ void kvadrat(int xx)
 		for(x = xx; x <= (xx+80); ++x)
 		{
 			nesto = fopen("/dev/vga_dma", "w");
-			fprintf(nesto,"%d,%d,%#04x\n", x, y+i*80, 0x4400);
+			fprintf(nesto,"%d,%d,%#04x\n", x, y+i*80, boja);
 			fclose(nesto);
 		}
 
@@ -139,7 +139,7 @@ void kvadrat(int xx)
 		for(x = y; x <= (y + 80); ++x)
 		{
 			nesto = fopen("/dev/vga_dma", "w");
-			fprintf(nesto,"%d,%d,%#04x\n", xx + 80*i, x, 0x4400);
+			fprintf(nesto,"%d,%d,%#04x\n", xx + 80*i, x, boja);
 			fclose(nesto);
 		}
 }
