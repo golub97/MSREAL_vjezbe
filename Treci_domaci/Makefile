@@ -1,8 +1,8 @@
 sources=$(wildcard *.c)
 objs=$(sources:.c=.o)
 
-all: test_image 
-test_image: $(objs)
+all: aplikacija 
+aplikacija: $(objs)
 	@echo "Building output binary.."
 	$(CC) -o $@ $(objs) -lm
 %.o: %.c
@@ -16,7 +16,7 @@ test_image: $(objs)
 	sed 's,    \($*\)\.o[ :]*     ,    \1.o $@ :   ,   g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 clean:
-	@rm -f test_image *.o *.d*
+	@rm -f aplikacija *.o *.d*
 	@echo "Clean done.."
 
 -include $(sources:.c=.d)
